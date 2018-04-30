@@ -4,4 +4,5 @@ node_js:
 before_install:
 - npm install -g typescript@latest
 script:
-- npm run build && npm run test-only
+- npm run build
+- npm run test
