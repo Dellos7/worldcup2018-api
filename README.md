@@ -1,4 +1,4 @@
-# Worldcup 2018 API
+# Worldcup 2018 API [![Build Status](https://travis-ci.org/Dellos7/worldcup2018-api.svg?branch=master)](https://travis-ci.org/Dellos7/worldcup2018-api)
 
 Will use data from https://raw.githubusercontent.com/lsv/fifa-worldcup-2018/master/data.json
 

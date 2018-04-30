@@ -31,7 +31,7 @@ class App {
           res.status(200).send(data);
         });
     
-        this.app.use('/', router)
+        this.app.use('/', router); 
     
     }
 }
