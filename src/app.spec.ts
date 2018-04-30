@@ -1,11 +1,11 @@
-import app from './App';
+import App from './App';
 import {expect} from 'chai';
 import * as supertest from 'supertest'
 
 describe('GET /', () => {
 
     it('should work', () => {
-        return supertest(app)
+        return supertest(App)
             .get('/')
             .expect('Content-Type', /json/)
             .expect(200)
@@ -19,7 +19,7 @@ describe('GET /', () => {
 describe('POST /', () => {
 
     it('should work', () => {
-        return supertest(app)
+        return supertest(App)
             .post('/')
             .send({
                 'name': 'david'
