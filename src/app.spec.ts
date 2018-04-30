@@ -1,6 +1,6 @@
-import App from './App';
+import App from './app';
 import {expect} from 'chai';
-import * as supertest from 'supertest'
+import * as supertest from 'supertest';
 
 describe('GET /', () => {
 
