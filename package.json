@@ -8,8 +8,8 @@
     "dev": "tsc --watch & nodemon dist/server.js",
     "start": "node ./dist/server.js",
     "prod": "npm run build && npm start",
-    "test": "tsc && mocha dist/**/*.spec.js --exit",
-    "test-only": "mocha dist/**/*.spec.js"
+    "test": "tsc && mocha --recursive dist --exit",
+    "test-only": "mocha --recursive dist --exit"
   },
   "keywords": [],
   "author": "",
