@@ -33,6 +33,31 @@ Returns:
 }
 ```
 
+### GET /teams
+
+Returns an array of the teams:
+
+```json
+[
+    {
+        "id": 1,
+        "name": "Russia",
+        "iso2": "ru"
+    },
+    {
+        "id": 2,
+        "name": "Saudi Arabia",
+        "iso2": "sa"
+    },
+    {
+        "id": 3,
+        "name": "Egypt",
+        "iso2": "eg"
+    },
+    ...
+]
+```
+
 ### GET /groups
 
 Will return the parsed data from the groups.

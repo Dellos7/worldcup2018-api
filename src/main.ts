@@ -1,4 +1,3 @@
-
 import Match from 'models/match';import Stadium from 'models/stadium';
 import Channel from 'models/channel';
 import Group from 'models/group';
@@ -7,40 +6,78 @@ import Team from './models/team';
 import axios from 'axios';
 import { AxiosInstance, AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
 import TeamParser from './parsers/team';
+import HttpAxiosService from 'services/http-axios-service';
 
 
 class DataService {
 
-    public static matches: Match[];
-    public static stadiums: Stadium[];
-    public static channels: Channel[];
-    public static groups: Group[];
-    public static teams: Team[];
+    public httpAxiosService: HttpAxiosService;
+    public url: string;
 
-    public static initFromJsonDataUrl( jsonDataUrl: string ): Promise<boolean> {
-        return new Promise( (resolve, reject) => {
-            let config: AxiosRequestConfig = {
-                url: jsonDataUrl,
-                method: 'get'
-            };
-            let axiosInstance: AxiosInstance = axios.create();
-            axiosInstance.request(config).then(
-                (res) => {
-                    if(res && res.data) {
-                        this.init( res.data );
-                        resolve(true);
-                    }
+    public matches: Match[];
+    public stadiums: Stadium[];
+    public channels: Channel[];
+    public groups: Group[];
+    public teams: Team[];
+
+    constructor( httpAxiosService: HttpAxiosService, url: string ) {
+        this.httpAxiosService = httpAxiosService;
+        this.url = url;
+    }
+
+    public getData( url: string ): Promise<any> {
+        return this.httpAxiosService.doGet( url );
+    }
+
+    private parse( url: string ): Promise<any> {
+        return new Promise<any>( (resolve, reject) => {
+            this.getData( url ).then(
+                (data) => {
+                    resolve(data);
                 }
             ).catch(
                 (err) => {
-                    reject();
+                    reject(err);
                 }
             );
         });
     }
 
-    public static init( jsonData: any ) {
-        DataService.teams = TeamParser.parseTeams(jsonData);
+    public parseAll( url: string ): Promise<boolean> | Promise<any> {
+        if( !url ) {
+            url = this.url;
+        }
+        return new Promise<boolean>( (resolve, reject) => {
+            this.parse( url ).then(
+                (data) => {
+                    this.teams = TeamParser.parseTeams(data);
+                    resolve(true);
+                }
+            ).catch(
+                (err) => {
+                    reject(err);
+                }
+            );
+        });
+        
+    }
+
+    public parseTeams( url: string ): Promise<boolean>{
+        if( !url ) {
+            url = this.url;
+        }
+        return new Promise<boolean>( (resolve, reject) => {
+            this.parse( url ).then(
+                (data) => {
+                    this.teams = TeamParser.parseTeams(data);
+                    resolve(true);
+                }
+            ).catch(
+                (err) => {
+                    reject(err);
+                }
+            );
+        });
     }
 
 }

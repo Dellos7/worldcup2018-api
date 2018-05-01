@@ -1,16 +1,21 @@
+import  HttpAxiosService from './services/http-axios-service';
 import DataService from './main';
 import * as express from "express";
 import * as bodyParser from "body-parser";
 import { Request, Response } from "express";
 
-class App {
+const URL: string = 'https://raw.githubusercontent.com/lsv/fifa-worldcup-2018/master/data.json';
+
+class AppWrapper {
 
     public app: express.Application;
+    public dataService: DataService;
 
     constructor() {
         this.app = express();
         this.config();
         this.routes();
+        this.dataService = new DataService( new HttpAxiosService(), URL );
     }
 
     private config(): void {
@@ -33,12 +38,11 @@ class App {
         });
 
         router.get('/teams', (req: Request, res: Response) => {
-            DataService.initFromJsonDataUrl('https://raw.githubusercontent.com/lsv/fifa-worldcup-2018/master/data.json')
+            let url = req.params.url;
+            this.dataService.parseTeams( url )
                 .then(
-                    (callRes) => {
-                        res.status(200).send({
-                          teams: DataService.teams
-                        });
+                    (parsed) => {
+                        res.status(200).send(this.dataService.teams);
                     }
                 ).catch(
                     (err) => {
@@ -54,4 +58,4 @@ class App {
     }
 }
 
-export default new App().app;
+export default new AppWrapper();
