@@ -37,7 +37,7 @@ Returns:
 
 Will return the parsed data from the groups.
 
-## Developmen environment
+## Development environment
 
 ### Install modules
 

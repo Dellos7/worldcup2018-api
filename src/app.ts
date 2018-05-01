@@ -1,3 +1,4 @@
+import DataService from './main';
 import * as express from "express";
 import * as bodyParser from "body-parser";
 import { Request, Response } from "express";
@@ -30,6 +31,23 @@ class App {
           const data = req.body;
           res.status(200).send(data);
         });
+
+        router.get('/teams', (req: Request, res: Response) => {
+            DataService.initFromJsonDataUrl('https://raw.githubusercontent.com/lsv/fifa-worldcup-2018/master/data.json')
+                .then(
+                    (callRes) => {
+                        res.status(200).send({
+                          teams: DataService.teams
+                        });
+                    }
+                ).catch(
+                    (err) => {
+                        res.status(500).send({
+                            message: 'Error: ' + err
+                          });
+                    }
+                );
+          });
     
         this.app.use('/', router); 
     

@@ -1,8 +1,12 @@
 import Team from './team';
+import Group from './group';
+import Match from './match';
+import MatchType from './match-type';
 
 class Standing {
 
     private team: Team;
+    private group: Group;
     private played: number;
     private wins: number;
     private draws: number;
@@ -10,9 +14,10 @@ class Standing {
     private goalsFor: number;
     private goalsAgainst: number;
 
-    constructor( team: Team, played: number = 0, wins: number = 0, 
+    constructor( team: Team, group: Group = null, played: number = 0, wins: number = 0, 
         draws: number = 0, losts: number = 0, goalsFor: number = 0, goalsAgainst: number = 0 ) {
         this.team = team;
+        this.group = group;
         this.played = played;
         this.wins = wins;
         this.draws = draws;
@@ -23,6 +28,10 @@ class Standing {
 
     public getTeam(): Team {
         return this.team;
+    }
+
+    public getGroup(): Group {
+        return this.group;
     }
 
     public getPlayed(): number {
@@ -77,6 +86,10 @@ class Standing {
         this.team = team;
     }
 
+    public setGroup( group: Group ) {
+        this.group = group;
+    }
+
     public getGoalsDifference(): number {
         return this.getGoalsFor() - this.getGoalsAgainst();
     }
@@ -112,6 +125,45 @@ class Standing {
         if (goals) {
             goals = +this.goalsAgainst + +goals;
             this.goalsAgainst = goals;
+        }
+    }
+
+    public addPlayedMatch( match: Match ) {
+        if( match.getType() === MatchType.GROUP && match.isFinish() ) {
+            if( this.getTeam() === match.getHomeTeam() ) {
+                this.addPlayed();
+                this.addGoalsFor(match.getHomeResult());
+                this.addGoalsAgainst(match.getAwayResult());
+                if( this.getTeam() === match.getWinner() ) {
+                    this.addWin();
+                }
+                else if( this.getTeam() === match.getLoser() ) {
+                    this.addLost();
+                }
+                else {
+                    this.addDraw();
+                }
+            }
+            else if( this.getTeam() === match.getAwayTeam() ) {
+                this.addPlayed();
+                this.addGoalsFor(match.getAwayResult());
+                this.addGoalsAgainst(match.getHomeResult());
+                if( this.getTeam() === match.getWinner() )  {
+                    this.addWin();
+                }
+                else if( this.getTeam() === match.getLoser() ) {
+                    this.addLost();
+                }
+                else {
+                    this.addDraw();
+                }
+            }
+            else {
+                throw new Error('The match does not correspond to this standing');
+            }
+        }
+        else {
+            throw new Error('This match is not group or has not still been finished');
         }
     }
 
